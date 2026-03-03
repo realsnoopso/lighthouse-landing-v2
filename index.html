@@ -629,6 +629,154 @@
             color: var(--text-muted);
         }
 
+        /* ── Presale ── */
+        .presale-section {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presale-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+        }
+
+        .presale-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .presale-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .presale-desc {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            margin-bottom: 48px;
+            font-weight: 400;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .presale-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 44px 40px;
+            max-width: 560px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .presale-price-wrapper {
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .presale-price {
+            font-size: clamp(2.4rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .presale-price-label {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-weight: 500;
+        }
+
+        .presale-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+            text-align: left;
+        }
+
+        .presale-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .presale-step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .presale-step-text {
+            font-size: 1rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        .presale-note {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        .presale-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #ffffff;
+            color: #6366F1;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 18px 44px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .presale-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
         /* ── Footer ── */
         footer {
             border-top: 1px solid #ffffff08;
@@ -685,6 +833,18 @@
 
             .demo-chat {
                 padding: 24px 20px;
+            }
+
+            .presale-section {
+                padding: 72px 0;
+            }
+
+            .presale-box {
+                padding: 32px 24px;
+            }
+
+            .presale-steps {
+                gap: 12px;
             }
         }
     </style>
@@ -892,6 +1052,42 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             <div class="cta-sub fade-in">무료로 시작 · 카드 등록 없음</div>
+        </div>
+    </section>
+
+    <!-- ═══ PRESALE ═══ -->
+    <section class="presale-section">
+        <div class="container">
+            <div class="presale-badge">예약 구매 안내</div>
+            <h2 class="presale-title fade-in">
+                지금 예약하면<br>
+                정식 출시 전 가격으로.
+            </h2>
+            <p class="presale-desc fade-in">
+                입금 확인 후 런칭 일정에 맞춰 개별 셋팅 안내를 보내드립니다.
+            </p>
+            <div class="presale-box fade-in">
+                <div class="presale-price-wrapper">
+                    <div class="presale-price">50,000원</div>
+                    <div class="presale-price-label">정식 출시 전 예약가</div>
+                </div>
+                <div class="presale-steps">
+                    <div class="presale-step">
+                        <div class="presale-step-num">1</div>
+                        <div class="presale-step-text">카카오페이 또는 토스로 50,000원 송금</div>
+                    </div>
+                    <div class="presale-step">
+                        <div class="presale-step-num">2</div>
+                        <div class="presale-step-text">송금 후 '예약 완료 폼' 작성</div>
+                    </div>
+                </div>
+                <div class="presale-note">
+                    입금 확인 후 런칭 일정에 맞춰 개별 셋팅 안내를 보내드립니다.
+                </div>
+            </div>
+            <a href="#" class="presale-btn fade-in">
+                ✦ 지금 예약 구매하기
+            </a>
         </div>
     </section>
 
