@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighthouse — 계획 세우다 지치는 당신을 위한 생산성 도우미</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0C0C0F;
+            --bg-card: #16161B;
+            --bg-card-hover: #1E1E25;
+            --tangerine: #FF8A47;
+            --tangerine-soft: #FF8A4720;
+            --tangerine-glow: #FF8A4740;
+            --mint: #7ECFB3;
+            --mint-soft: #7ECFB315;
+            --lavender: #B8A9E8;
+            --lavender-soft: #B8A9E815;
+            --text: #E8E6E3;
+            --text-dim: #8A8A8E;
+            --text-muted: #5A5A60;
+            --danger-soft: #FF6B6B20;
+            --danger: #FF6B6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Noise overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ── Layout ── */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--tangerine-soft) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--tangerine-soft);
+            border: 1px solid var(--tangerine);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--tangerine);
+            margin-bottom: 32px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--tangerine);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            line-height: 1.35;
+            letter-spacing: -0.03em;
+            margin-bottom: 28px;
+            animation: fadeUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            color: var(--tangerine);
+            position: relative;
+        }
+
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--tangerine);
+            opacity: 0.4;
+            border-radius: 2px;
+        }
+
+        .hero .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            max-width: 560px;
+            font-weight: 400;
+            animation: fadeUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--tangerine);
+            color: var(--bg);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 16px 36px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: fadeUp 0.8s ease 0.3s both;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--tangerine-glow);
+        }
+
+        .hero-cta svg {
+            transition: transform 0.3s ease;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* ── Pain Points ── */
+        .pain-section {
+            border-top: 1px solid #ffffff08;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--tangerine);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            font-weight: 900;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            margin-bottom: 48px;
+        }
+
+        .pain-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .pain-card {
+            background: var(--bg-card);
+            border: 1px solid #ffffff08;
+            border-radius: 16px;
+            padding: 28px 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--danger);
+            opacity: 0.5;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .pain-card:hover {
+            background: var(--bg-card-hover);
+            border-color: #ffffff12;
+            transform: translateX(4px);
+        }
+
+        .pain-emoji {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .pain-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .pain-desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        /* ── Solution ── */
+        .solution-section {
+            border-top: 1px solid #ffffff08;
+        }
+
+        .solution-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .solution-card {
+            background: var(--bg-card);
+            border: 1px solid #ffffff08;
+            border-radius: 20px;
+            padding: 36px 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card:hover {
+            border-color: #ffffff15;
+            transform: translateY(-2px);
+        }
+
+        .solution-card.primary {
+            border-color: var(--tangerine);
+            border-width: 1px;
+        }
+
+        .solution-card.primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top left, var(--tangerine-soft) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .solution-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .solution-icon.orange {
+            background: var(--tangerine-soft);
+        }
+
+        .solution-icon.mint {
+            background: var(--mint-soft);
+        }
+
+        .solution-icon.lavender {
+            background: var(--lavender-soft);
+        }
+
+        .solution-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .solution-card p {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .solution-card .tag {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 0.75rem;
+            color: var(--tangerine);
+            background: var(--tangerine-soft);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-weight: 500;
+        }
+
+        /* ── Tone Comparison ── */
+        .tone-section {
+            border-top: 1px solid #ffffff08;
+        }
+
+        .tone-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2px;
+            background: #ffffff06;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        .tone-header {
+            padding: 20px 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        .tone-header.bad {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+
+        .tone-header.good {
+            background: var(--tangerine-soft);
+            color: var(--tangerine);
+        }
+
+        .tone-cell {
+            background: var(--bg-card);
+            padding: 20px 16px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tone-cell.dim {
+            color: var(--text-muted);
+            text-decoration: line-through;
+            text-decoration-color: var(--text-muted);
+        }
+
+        .tone-cell.highlight-cell {
+            color: var(--tangerine);
+            font-weight: 500;
+        }
+
+        /* ── Demo ── */
+        .demo-section {
+            border-top: 1px solid #ffffff08;
+        }
+
+        .demo-chat {
+            background: var(--bg-card);
+            border: 1px solid #ffffff08;
+            border-radius: 20px;
+            padding: 32px;
+            margin-top: 40px;
+            max-width: 520px;
+        }
+
+        .demo-chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ffffff08;
+        }
+
+        .demo-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--tangerine), #FFAA70);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .demo-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .demo-status {
+            font-size: 0.75rem;
+            color: var(--mint);
+        }
+
+        .chat-bubble {
+            margin-bottom: 16px;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .chat-bubble.bot .bubble {
+            background: #1E1E25;
+            border-radius: 4px 16px 16px 16px;
+            padding: 16px 20px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 90%;
+        }
+
+        .chat-bubble.user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .chat-bubble.user .bubble {
+            background: var(--tangerine);
+            color: var(--bg);
+            border-radius: 16px 4px 16px 16px;
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            max-width: 75%;
+        }
+
+        .chat-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .chat-option {
+            background: var(--tangerine-soft);
+            border: 1px solid var(--tangerine);
+            color: var(--tangerine);
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .scope-result {
+            background: #111114;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-top: 12px;
+            font-size: 0.82rem;
+            line-height: 1.8;
+        }
+
+        .scope-result .step {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .scope-result .step-num {
+            color: var(--tangerine);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .scope-result .step-time {
+            color: var(--mint);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .scope-result .step-done {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-left: 22px;
+            margin-bottom: 10px;
+        }
+
+        /* ── Evidence ── */
+        .evidence-section {
+            border-top: 1px solid #ffffff08;
+        }
+
+        .evidence-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .evidence-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 20px 24px;
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid #ffffff06;
+        }
+
+        .evidence-marker {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--mint-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--mint);
+            font-weight: 700;
+        }
+
+        .evidence-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .evidence-text strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            border-top: 1px solid #ffffff08;
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .cta-section p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 40px;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--tangerine);
+            color: var(--bg);
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 18px 44px;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--tangerine-glow);
+        }
+
+        .cta-sub {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid #ffffff08;
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            section {
+                padding: 72px 0;
+            }
+
+            .tone-table {
+                grid-template-columns: 1fr;
+            }
+
+            .tone-header.bad:first-child {
+                display: none;
+            }
+
+            .tone-cell.dim {
+                display: none;
+            }
+
+            .demo-chat {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">ADHD 친화 생산성 도구</div>
+            <h1>
+                계획 세우다가<br>
+                하루가 끝나는 사람을 위한<br>
+                <span class="highlight">등대 하나.</span>
+            </h1>
+            <p class="hero-desc">
+                할 일은 많은데 뭐부터 해야 할지 모르겠고,<br>
+                계획을 세워도 실행이 안 되고,<br>
+                안 한 자신에게 또 실망하는 루프.<br><br>
+                Lighthouse는 그 루프를 끊습니다.
+            </p>
+            <a href="#features" class="hero-cta">
+                어떻게 다른지 보기
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ═══ PAIN ═══ -->
+    <section class="pain-section" id="pain">
+        <div class="container">
+            <div class="section-label">Problem</div>
+            <h2 class="section-title fade-in">
+                이거 다 나 얘기인데…<br>
+                싶다면, 혼자가 아니에요.
+            </h2>
+            <div class="pain-grid">
+                <div class="pain-card fade-in">
+                    <div class="pain-emoji">🌀</div>
+                    <div class="pain-title">"할 일 적었는데 그것만으로 진 빠져요"</div>
+                    <div class="pain-desc">뭘 먼저 할지 고르는 것 자체가 에너지를 다 써버려요. 우선순위를 정하는 게 이미 하나의 일이에요.</div>
+                </div>
+                <div class="pain-card fade-in">
+                    <div class="pain-emoji">🫥</div>
+                    <div class="pain-title">"범위가 넓어서 손이 안 가요"</div>
+                    <div class="pain-desc">"리서치하고 정리하고 인사이트까지" — 끝이 안 보이니까 시작도 못 해요. 흐지부지의 원인이에요.</div>
+                </div>
+                <div class="pain-card fade-in">
+                    <div class="pain-emoji">⏳</div>
+                    <div class="pain-title">"30분이면 될 줄 알았는데 2시간이에요"</div>
+                    <div class="pain-desc">시간 감각이 안 맞아서 계획이 매번 무너져요. 무너지면 자책하고, 회피하고, 다시 밀려요.</div>
+                </div>
+                <div class="pain-card fade-in">
+                    <div class="pain-emoji">😔</div>
+                    <div class="pain-title">"또 못 했다. 나는 왜 이럴까요"</div>
+                    <div class="pain-desc">계획 실패 → 자책 → 동기 저하 → 더 안 하게 돼요. 문제는 의지가 아니라 시스템인데요.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SOLUTION ═══ -->
+    <section class="solution-section" id="features">
+        <div class="container">
+            <div class="section-label">Solution</div>
+            <h2 class="section-title fade-in">
+                의지력이 아니라<br>
+                <span class="highlight">구조</span>가 답이에요.
+            </h2>
+            <div class="solution-grid">
+                <div class="solution-card primary fade-in">
+                    <div class="solution-icon orange">🎯</div>
+                    <h3>모호한 목표, 잘게 쪼개기</h3>
+                    <p>
+                        "리서치하고 비교하고 정리까지" 같은 모호한 목표를 감지해서,<br>
+                        시간대별 구체적 산출물로 쪼개줍니다.<br>
+                        <strong style="color:var(--text)">끝이 보여야 시작할 수 있으니까.</strong>
+                    </p>
+                    <span class="tag">94개 연구에서 실행률 2배 상승 확인</span>
+                </div>
+                <div class="solution-card fade-in">
+                    <div class="solution-icon lavender">⚡</div>
+                    <h3>하나만 고르면 나머지는 알아서</h3>
+                    <p>
+                        "오늘 꼭 하나만 끝낸다면?" 한 가지만 고르세요.<br>
+                        나머지는 AI가 에너지 패턴에 맞춰 배치합니다.<br>
+                        선택의 부담을 줄여드릴게요.
+                    </p>
+                    <span class="tag">결정 피로 최소화</span>
+                </div>
+                <div class="solution-card fade-in">
+                    <div class="solution-icon mint">📅</div>
+                    <h3>시간표는 AI가 먼저 짜줘요</h3>
+                    <p>
+                        "언제 하지?"를 고민할 필요 없이, AI가 시간표를 먼저 짜줍니다.<br>
+                        마음에 안 들면 탭 한 번으로 수정.<br>
+                        기본값이 있으니 결정 피로가 없어요.
+                    </p>
+                    <span class="tag">59만 명 대상 연구 기반 설계</span>
+                </div>
+                <div class="solution-card fade-in">
+                    <div class="solution-icon orange">🔄</div>
+                    <h3>시간 감각, 쓸수록 정확해져요</h3>
+                    <p>
+                        예상 시간 vs 실제 시간을 데이터로 비교합니다.<br>
+                        "실패했다"가 아니라 "다음엔 이만큼 더 잡자"로.<br>
+                        비난 없이, 점점 정확해지는 감각.
+                    </p>
+                    <span class="tag">시간 예측 오차 자동 보정</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ DEMO ═══ -->
+    <section class="demo-section">
+        <div class="container">
+            <div class="section-label">In Action</div>
+            <h2 class="section-title fade-in">
+                아침 5분.<br>
+                이렇게 시작합니다.
+            </h2>
+            <div class="demo-chat fade-in">
+                <div class="demo-chat-header">
+                    <div class="demo-avatar">🔥</div>
+                    <div>
+                        <div class="demo-name">Lighthouse</div>
+                        <div class="demo-status">아침 플래닝</div>
+                    </div>
+                </div>
+                <div class="chat-bubble bot">
+                    <div class="bubble">좋은 아침이에요 ☀️ 오늘 캘린더에 팀 미팅이 2시에 있네요. 그 외 시간 중에, 오늘 가장 하고 싶은 건 뭐예요?</div>
+                </div>
+                <div class="chat-bubble user">
+                    <div class="bubble">클라이언트 제안서 써야 하는데 리서치부터 초안까지 다 해야 해</div>
+                </div>
+                <div class="chat-bubble bot">
+                    <div class="bubble">
+                        이 작업, 범위가 좀 넓어 보여요. 끝이 보이게 쪼개볼까요?
+                        <div class="scope-result">
+                            <div class="step"><span class="step-num">1.</span><span>경쟁사 레퍼런스 3개 수집 + 메모 <span class="step-time">오전 · 40분</span></span></div>
+                            <div class="step-done">✅ 레퍼런스 캡처 3장 + 키포인트 메모</div>
+                            <div class="step"><span class="step-num">2.</span><span>제안서 목차 + 핵심 메시지 정리 <span class="step-time">오후 · 30분</span></span></div>
+                            <div class="step-done">✅ 목차 1장 + 메시지 3줄</div>
+                            <div class="step"><span class="step-num">3.</span><span>제안서 초안 1페이지 작성 <span class="step-time">오후 · 45분</span></span></div>
+                            <div class="step-done">✅ 초안 1페이지 완성</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-bubble bot">
+                    <div class="bubble">
+                        이렇게 배치했어요. 바꾸고 싶은 게 있으면 탭하세요 👇
+                    </div>
+                    <div class="chat-options">
+                        <div class="chat-option">이대로 좋아요</div>
+                        <div class="chat-option">시간 바꿀래요</div>
+                        <div class="chat-option">하나 빼고 싶어요</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ EVIDENCE ═══ -->
+    <section class="evidence-section">
+        <div class="container">
+            <div class="section-label">Evidence</div>
+            <h2 class="section-title fade-in">
+                감이 아니라<br>
+                근거로 설계했습니다.
+            </h2>
+            <div class="evidence-list">
+                <div class="evidence-item fade-in">
+                    <div class="evidence-marker">1</div>
+                    <div class="evidence-text"><strong>"언제 할지"를 정하면 실행률이 2배.</strong> 94개 연구, 8,000명 이상을 분석한 결과. "할 일 목록"만으로는 절반밖에 실행 못 하지만, 시간까지 정하면 달성률이 2배로 뛰었습니다. ADHD 그룹에서는 효과가 더 컸습니다.</div>
+                </div>
+                <div class="evidence-item fade-in">
+                    <div class="evidence-marker">2</div>
+                    <div class="evidence-text"><strong>스스로 고르게 하면 더 잘한다.</strong> 59만 명 대상 연구. 누군가가 시키는 구조보다, 본인이 선택한 구조 안에서 일할 때 동기와 성과 모두 높았습니다. Lighthouse가 "기본값 제안 + 사용자 수정" 방식을 쓰는 이유입니다.</div>
+                </div>
+                <div class="evidence-item fade-in">
+                    <div class="evidence-marker">3</div>
+                    <div class="evidence-text"><strong>사람은 걸리는 시간을 40~60% 적게 잡는다.</strong> 심리학에서 수십 년간 반복 확인된 현상입니다. "30분이면 되겠지"가 실제론 50분 걸리는 거예요. 예상과 실제를 비교해주면 감각이 점점 맞아갑니다.</div>
+                </div>
+                <div class="evidence-item fade-in">
+                    <div class="evidence-marker">4</div>
+                    <div class="evidence-text"><strong>AI 코치도 사람 코치만큼 효과적이다.</strong> 327명을 10개월간 추적한 실험에서, AI 코칭을 받은 그룹이 사람 코치를 받은 그룹과 동일한 목표 달성률을 보였습니다.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="fade-in">
+                오늘도 계획만 세우다<br>
+                끝나지 않도록.
+            </h2>
+            <p class="fade-in">
+                Lighthouse가 구조를 잡아줄게요.<br>
+                당신은 하기로 한 걸 하면 됩니다.
+            </p>
+            <a href="#" class="cta-btn fade-in">
+                시작하기
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <div class="cta-sub fade-in">무료로 시작 · 카드 등록 없음</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            © 2026 Lighthouse. Evidence-based productivity for ADHD minds.
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, i * 80);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+        
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
